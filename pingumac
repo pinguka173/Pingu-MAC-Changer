@@ -1,0 +1,106 @@
+#!/bin/bash
+#################################################################################
+# Help                                                                          #
+#################################################################################
+Help ()
+{
+    echo "This script will change your MAC address."
+    echo "You may generate one randomly or enter it manually"
+    echo
+    echo "Syntax: macchanger [-r|m|V]"
+    echo "options:"
+    echo "r     Generate a MAC address randomly and apply"
+    echo "m     Manually enter a MAC address and apply"
+    echo "V     Print software version and exit"
+    echo
+}
+
+#################################################################################
+# Version                                                                       #
+#################################################################################
+Version ()
+{
+    echo "Current version: 1.0.0"
+}
+
+#################################################################################
+# Random MAC                                                                    #
+#################################################################################
+Random ()
+{
+    iface=$(ip link | awk -F: '$0 !~ "lo|vir|wl|^[^0-9]"{print $2;getline}' | head -n 1 | tr -d ' ')
+
+    if [ -z "$iface" ]; then
+        echo "No valid interface found."
+        exit 1
+    fi
+
+    # Generate a proper random MAC address (starts with 02 for locally administered)
+    hexchars="0123456789ABCDEF"
+    mac="02"
+
+    for i in {1..5}; do
+        byte="${hexchars:$((RANDOM % 16)):1}${hexchars:$((RANDOM % 16)):1}"
+        mac="$mac:$byte"
+    done
+
+    echo "Changing MAC address of $iface to $mac"
+    sudo ip link set dev "$iface" down
+    sudo ip link set dev "$iface" address "$mac"
+    sudo ip link set dev "$iface" up
+
+    echo "MAC changed. Now run like the untraceable gremlin you are."
+}
+
+
+#################################################################################
+# Manually enter MAC                                                            #
+#################################################################################
+Manually ()
+{
+    iface=$(ip link | awk -F: '$0 !~ "lo|vir|wl|^[^0-9]"{print $2;getline}' | head -n 1 | tr -d ' ')
+    mac="$1"
+
+    if [ -z "$mac" ]; then
+        echo "You need to provide a MAC address."
+        exit 1
+    fi
+
+    echo "Changing MAC address of $iface to $mac"
+    sudo ip link set dev "$iface" down
+    sudo ip link set dev "$iface" address "$mac"
+    sudo ip link set dev "$iface" up
+
+    echo "MAC changed manually."
+}
+
+#################################################################################
+#################################################################################
+# Main program                                                                  #
+#################################################################################
+#################################################################################
+#################################################################################
+# Process options                                                               #
+#################################################################################
+while getopts "hrm:V" option; do
+    case $option in
+        h) # Display help
+            Help
+            exit;;
+        \?) # Invalid option
+            echo "Error: Invalid option"
+            exit;;
+        V) # Version
+            Version
+            exit;;
+        r) # Random generating
+            Random
+            exit;;
+        m) # Manually changing
+            Manually "$OPTARG"
+            exit;;
+    esac
+done
+
+# Pick a random interface, or set your own
+alias macchanger='/home/Documents/MACChanger/macchanger.sh'
