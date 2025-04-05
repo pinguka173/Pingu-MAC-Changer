@@ -159,6 +159,9 @@ while getopts "hrm:Vt:u" option; do
         u) # Update
             Update
             exit;;
+        V) # Version
+            Version
+            exit;;
         :) # Catch missing arguments
             echo "Error: Option -$OPTARG requires an argument."
             exit 1;;
