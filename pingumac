@@ -20,7 +20,7 @@ Help ()
 #################################################################################
 Version ()
 {
-    echo "Current version: 1.0.0"
+    echo "Current version: 1.0.1"
 }
 
 #################################################################################
@@ -35,7 +35,7 @@ Random ()
         exit 1
     fi
 
-    # Generate a proper random MAC address (starts with 02 for locally administered)
+    # Generate a proper random MAC address
     hexchars="0123456789ABCDEF"
     mac="02"
 
@@ -101,6 +101,3 @@ while getopts "hrm:V" option; do
             exit;;
     esac
 done
-
-# Pick a random interface, or set your own
-alias macchanger='/home/Documents/MACChanger/macchanger.sh'
