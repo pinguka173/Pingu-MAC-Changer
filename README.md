@@ -56,9 +56,8 @@ pingumac [option] [mac(optional)]
 
 - Update:
   ```bash
-  pingumac -u path/to/file
+  pingumac -u
   ```
-  While updating you must give the file path where "pingumac" and "install.sh" is located. In my case this is "/home/pingu/Documents/Pingu-MAC-Changer/".
 ---
 
 ## 🛡️ Notes
