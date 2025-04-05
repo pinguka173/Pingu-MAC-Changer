@@ -11,6 +11,7 @@ Help ()
     echo "options:"
     echo "r     Generate a MAC address randomly and apply"
     echo "m     Manually enter a MAC address and apply"
+    echo "t     Set timer in seconds to randomize MAC address every {t} seconds."
     echo "V     Print software version and exit"
     echo
 }
@@ -20,7 +21,7 @@ Help ()
 #################################################################################
 Version ()
 {
-    echo "Current version: 1.0.1"
+    echo "Current version: 1.0.2"
 }
 
 #################################################################################
@@ -52,6 +53,25 @@ Random ()
     echo "MAC changed. Now run like the untraceable gremlin you are."
 }
 
+#################################################################################
+# Loop Random MAC with Timer                                                    #
+#################################################################################
+LoopRandom ()
+{
+    interval="$1"
+    if ! [[ "$interval" =~ ^[0-9]+$ ]]; then
+        echo "Provide the time in seconds with -t."
+        exit 1
+    fi
+
+    echo "MAC address will be randomized every $interval seconds."
+    
+    while true; do
+        Random
+        echo "Sleeping for $interval seconds..."
+        sleep "$interval"
+    done
+}
 
 #################################################################################
 # Manually enter MAC                                                            #
@@ -82,7 +102,7 @@ Manually ()
 #################################################################################
 # Process options                                                               #
 #################################################################################
-while getopts "hrm:V" option; do
+while getopts "hrm:Vt:" option; do
     case $option in
         h) # Display help
             Help
@@ -98,6 +118,9 @@ while getopts "hrm:V" option; do
             exit;;
         m) # Manually changing
             Manually "$OPTARG"
+            exit;;
+        t) # Randomizing loop
+            LoopRandom "$OPTARG"
             exit;;
     esac
 done
