@@ -39,6 +39,11 @@ pingumac [option] [mac(optional)]
   pingumac -r
   ```
 
+- Randomize over and over again:
+  ```bash
+  pingumac -t 30
+  ```
+
 - Set specific MAC:
   ```bash
   pingumac -m 00:11:22:33:44:55
