@@ -7,12 +7,13 @@ Help ()
     echo "This script will change your MAC address."
     echo "You may generate one randomly or enter it manually"
     echo
-    echo "Syntax: macchanger [-r|m|V]"
+    echo "Syntax: macchanger [-r|m|V|u]"
     echo "options:"
     echo "r     Generate a MAC address randomly and apply"
     echo "m     Manually enter a MAC address and apply"
     echo "t     Set timer in seconds to randomize MAC address every {t} seconds."
     echo "V     Print software version and exit"
+    echo "u     Update to the latest version"
     echo
 }
 
@@ -21,7 +22,7 @@ Help ()
 #################################################################################
 Version ()
 {
-    echo "Current version: 1.0.2"
+    echo "Current version: 1.0.3"
 }
 
 #################################################################################
@@ -95,6 +96,19 @@ Manually ()
 }
 
 #################################################################################
+# Update                                                                        #
+#################################################################################
+Update()
+{
+    path="$1"
+    cd "$path"
+    echo "Downloading..."
+    git clone https://github.com/pinguka173/Pingu-MAC-Changer.git
+    echo "Installing..."
+    ./install.sh
+}
+
+#################################################################################
 #################################################################################
 # Main program                                                                  #
 #################################################################################
@@ -102,7 +116,7 @@ Manually ()
 #################################################################################
 # Process options                                                               #
 #################################################################################
-while getopts "hrm:Vt:" option; do
+while getopts "hrm:Vt:u:" option; do
     case $option in
         h) # Display help
             Help
@@ -121,6 +135,9 @@ while getopts "hrm:Vt:" option; do
             exit;;
         t) # Randomizing loop
             LoopRandom "$OPTARG"
+            exit;;
+        u) # Update
+            Update
             exit;;
     esac
 done
