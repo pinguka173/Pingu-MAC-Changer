@@ -111,7 +111,7 @@ Update() {
     fi
 
     echo "[*] Handing off update to external updater..."
-    pingumac-updater
+    exec pingumac-updater
 }
 
 #################################################################################
