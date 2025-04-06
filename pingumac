@@ -22,7 +22,7 @@ Help ()
 #################################################################################
 Version ()
 {
-    echo "Current version: 1.0.4"
+    echo "Current version: 1.0.5"
 }
 
 #################################################################################
@@ -99,40 +99,14 @@ Manually ()
 # Update                                                                        #
 #################################################################################
 Update() {
-    TMP_DIR="/tmp/pingumac_update_$$"
-    REPO_URL="https://github.com/pinguka173/Pingu-MAC-Changer.git"
-    INSTALL_SCRIPT="install.sh"
-    REPO_NAME="Pingu-MAC-Changer"
-
-    echo "[*] Fetching latest version from GitHub..."
-
-    mkdir -p "$TMP_DIR"
-    git clone "$REPO_URL" "$TMP_DIR/$REPO_NAME" || {
-        echo "Git clone failed. GitHub's probably down."
-        rm -rf "$TMP_DIR"
-        exit 1
-    }
-
-    cd "$TMP_DIR/$REPO_NAME" || {
-        echo "Failed to enter repo directory."
-        rm -rf "$TMP_DIR"
-        exit 1
-    }
-
-    if [ ! -f "$INSTALL_SCRIPT" ]; then
-        echo "install.sh not found in the repo."
-        rm -rf "$TMP_DIR"
+    if ! command -v pingumac-updater >/dev/null; then
+        echo "Updater not found!"
         exit 1
     fi
 
-    chmod +x "$INSTALL_SCRIPT"
-    echo "[*] Running installer..."
-    ./"$INSTALL_SCRIPT"
-
-    echo "[✓] Update complete."
-    rm -rf "$TMP_DIR"
+    echo "[*] Handing off update to external updater..."
+    pingumac-updater
 }
-
 
 #################################################################################
 #################################################################################
