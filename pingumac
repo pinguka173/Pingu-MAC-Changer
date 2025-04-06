@@ -101,7 +101,7 @@ Manually ()
 Update() {
     if [ "$EUID" -ne 0 ]; then
     echo "This updater needs root privileges."
-    echo "Try: sudo $0"
+    echo "Try: sudo pingumac -u"
     exit 1
     fi
 
