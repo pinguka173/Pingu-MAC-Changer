@@ -1,22 +1,37 @@
 #!/bin/bash
-set -e
 
-SCRIPT_NAME="pingumac"
-TARGET_DIR="/usr/local/bin"
-SOURCE_SCRIPT="pingumac"
+INSTALL_DIR="/usr/local/bin"
+TARGET_NAME="pingumac"
+SOURCE_PATH="$(pwd)/$TARGET_NAME"
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-SCRIPT_PATH="$SCRIPT_DIR/$SOURCE_SCRIPT"
-
-if [ ! -f "$SCRIPT_PATH" ]; then
-    echo "Error: $SOURCE_SCRIPT not found!"
-    exit 1
+# Check if the file exists
+if [ ! -f "$SOURCE_PATH" ]; then
+  echo "Error: $TARGET_NAME not found in current directory."
+  exit 1
 fi
 
-chmod +x "$SCRIPT_PATH"
+# Kill any old file or symlink at the target location
+if [ -e "$INSTALL_DIR/$TARGET_NAME" ] || [ -L "$INSTALL_DIR/$TARGET_NAME" ]; then
+  echo "Removing old target in $INSTALL_DIR"
+  rm -f "$INSTALL_DIR/$TARGET_NAME"
+fi
 
-echo "Installing $SCRIPT_NAME to $TARGET_DIR..."
+# Sanity check
+if [ "$SOURCE_PATH" != "$INSTALL_DIR/$TARGET_NAME" ]; then
+  echo "Copying new binary to $INSTALL_DIR"
+  cp -f "$SOURCE_PATH" "$INSTALL_DIR/$TARGET_NAME"
+else
+  echo "Skipping copy: source and destination are the same"
+fi
 
-sudo ln -sf "$(realpath "$SCRIPT_PATH")" "$TARGET_DIR/$SCRIPT_NAME"
+# Remove old symlink if it exists
+if [ -L "/bin/$TARGET_NAME" ]; then
+  echo "Removing old symlink"
+  rm -f "/bin/$TARGET_NAME"
+fi
 
-echo "$SCRIPT_NAME has been successfully installed!"
+# Create new symlink
+echo "Creating new symlink in /bin"
+ln -s "$INSTALL_DIR/$TARGET_NAME" "/bin/$TARGET_NAME"
+
+echo "Installation complete, you magnificent bastard."
