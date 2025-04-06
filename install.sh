@@ -30,6 +30,9 @@ if [ -L "/bin/$TARGET_NAME" ]; then
   rm -f "/bin/$TARGET_NAME"
 fi
 
+cp -f "$(pwd)/pingumac-updater.sh" /usr/local/bin/pingumac-updater
+chmod +x /usr/local/bin/pingumac-updater
+
 # Create new symlink
 echo "Creating new symlink in /bin"
 ln -s "$INSTALL_DIR/$TARGET_NAME" "/bin/$TARGET_NAME"
