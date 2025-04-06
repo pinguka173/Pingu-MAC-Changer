@@ -22,7 +22,7 @@ Help ()
 #################################################################################
 Version ()
 {
-    echo "Current version: 1.0.5"
+    echo "Current version: 1.0.5b"
 }
 
 #################################################################################
@@ -99,6 +99,12 @@ Manually ()
 # Update                                                                        #
 #################################################################################
 Update() {
+    if [ "$EUID" -ne 0 ]; then
+    echo "This updater needs root privileges."
+    echo "Try: sudo $0"
+    exit 1
+    fi
+
     if ! command -v pingumac-updater >/dev/null; then
         echo "Updater not found!"
         exit 1
