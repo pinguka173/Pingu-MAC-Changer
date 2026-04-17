@@ -22,7 +22,7 @@ Run these commands in your terminal:
 git clone https://github.com/pinguka173/Pingu-MAC-Changer.git
 cd Pingu-MAC-Changer
 chmod +x install.sh
-./install.sh
+sudo ./install.sh
 ```
 
 ---
